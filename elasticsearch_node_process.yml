@@ -73,7 +73,7 @@ resources:
       image: { get_param: image }
       key_name: { get_param: ssh_keypair_name }
       metadata:
-        rax-heat: { get_param: "stack_id" }
+        rax-heat: { get_param: stack_id }
       networks:
       - uuid: { get_param: es_network_id }
 
