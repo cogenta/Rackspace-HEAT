@@ -28,6 +28,8 @@ parameters:
   es_network_id:
     description: cloud network id for intra-cluster communication
     type: string
+    constraints:
+      - custom_constraint: rackconnect.network
 
   ssh_private_key:
     description: private key to access the created servers
