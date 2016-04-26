@@ -1,0 +1,67 @@
+heat_template_version: 2016-04-08
+
+#	GfK Online Pricing Intelligence
+#	Production Platform Orchestration Template (HEAT)
+#	http://docs.openstack.org/developer/heat/template_guide/hot_spec.html
+#	http://docs.openstack.org/developer/heat/template_guide/openstack.html
+
+description: |
+  This is a template to deploy a windows server
+
+#	VERSION HISTORY
+#
+#	Version	Date		Author			Comments
+#	-------	----------	------------	-----------------------------
+#	1.0		2016-04-26	Tommy Monk  	Initial Version
+
+parameters:
+
+  name_map:
+    type: json
+    
+  index:
+    type: string
+    
+  image:
+    label: Server Image
+    description: Operating system to use for your server.
+    type: string
+    default: Ubuntu 14.04 LTS (Trusty Tahr) (PVHVM)
+    
+  flavor:
+    description: Flavor for Cloud Servers
+    type: string
+    default: 2 GB General Purpose v1
+    
+  network_id:
+    description: cloud network id for intra-cluster communication
+    type: string
+    constraints:
+      - custom_constraint: rackconnect.network
+
+resources:      
+ server:
+    type: OS::Nova::Server
+    properties:
+      image: { get_param: image }
+      flavor: { get_param: flavor }
+      name: { get_param: [name_map, {get_param: index}] }
+      admin_pass: { get_attr: [server_password, value] }
+      networks:
+      - network: 11111111-1111-1111-1111-111111111111
+      - network: { get_param: network_id }
+      metadata:
+        rax-heat: { get_param: "OS::stack_id" }
+        stack-name: { get_param: "OS::stack_name" }
+        
+  server_password:
+    type: OS::Heat::RandomString
+    properties:
+      length: 14
+      character_classes:
+        - class: digits
+          min: 1
+        - class: uppercase
+          min: 1
+        - class: lowercase
+          min: 1
