@@ -54,6 +54,7 @@ resources:
         rax-heat: { get_param: "OS::stack_id" }
         stack-name: { get_param: "OS::stack_name" }
 
+
  server_password:
     type: OS::Heat::RandomString
     properties:
