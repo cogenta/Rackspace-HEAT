@@ -22,6 +22,9 @@ parameters:
   index:
     type: string
     
+  admin_pass:
+    type: string
+    
   image:
     label: Server Image
     description: Operating system to use for your server.
@@ -46,23 +49,10 @@ resources:
       image: { get_param: image }
       flavor: { get_param: flavor }
       name: { get_param: [name_map, {get_param: index}] }
-      admin_pass: { get_attr: [server_password, value] }
+      admin_pass: { get_param: admin_pass }
       networks:
       - network: 11111111-1111-1111-1111-111111111111
       - network: { get_param: network_id }
       metadata:
         rax-heat: { get_param: "OS::stack_id" }
         stack-name: { get_param: "OS::stack_name" }
-
-
- server_password:
-    type: OS::Heat::RandomString
-    properties:
-      length: 14
-      character_classes:
-      - class: digits
-        min: 1
-      - class: uppercase
-        min: 1
-      - class: lowercase
-        min: 1
