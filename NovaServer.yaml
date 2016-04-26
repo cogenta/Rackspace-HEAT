@@ -55,13 +55,13 @@ resources:
         stack-name: { get_param: "OS::stack_name" }
         
  server_password:
-   type: OS::Heat::RandomString
-   properties:
-     length: 14
-     character_classes:
-       - class: digits
-         min: 1
-       - class: uppercase
-         min: 1
-       - class: lowercase
-         min: 1
+    type: OS::Heat::RandomString
+    properties:
+      length: 14
+      character_classes:
+      - class: digits
+        min: 1
+      - class: uppercase
+        min: 1
+      - class: lowercase
+        min: 1
