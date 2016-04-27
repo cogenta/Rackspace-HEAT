@@ -41,6 +41,18 @@ parameters:
     type: string
     constraints:
       - custom_constraint: rackconnect.network
+      
+  domain:
+    type: string
+    
+  oupath:
+    type: string
+    
+  credential_username:
+    type: string
+
+  credential_password:
+    type: string
 
 resources:      
  server:
@@ -48,7 +60,7 @@ resources:
     properties:
       image: { get_param: image }
       flavor: { get_param: flavor }
-      name: { get_param: [name_map, {get_param: index}] }
+      name: { get_param: [name_map, { get_param: index}] }
       admin_pass: { get_param: admin_pass }
       networks:
       - network: 11111111-1111-1111-1111-111111111111
@@ -56,3 +68,21 @@ resources:
       metadata:
         rax-heat: { get_param: "OS::stack_id" }
         stack-name: { get_param: "OS::stack_name" }
+      user_data_format: RAW
+      user_data:
+        str_replace:
+          template: |
+            # Set DNS Servers
+            Set-DnsClientServerAddress -InterfaceAlias "RC-FW-*" -ServerAddresses ("172.30.1.7","172.30.1.8")
+            
+            # Create credentials
+            $secpasswd = ConvertTo-SecureString "%%cCredentialPassword" -AsPlainText -Force
+            $credential = New-Object System.Management.Automation.PSCredential("%%cCredentialUser", $secpasswd)
+            
+            # Add to domain
+            Add-Computer -DomainName %%cDomain -OUPath "%%cOUPath" -Credential $credential -Restart
+          params:
+            "%%cDomain" : { get_param:  domain }
+            "%%cOUPath" : { get_param: oupath }
+            "%%cCredentialUser" : { get_param: credential_username }
+            "%%cCredentialPassword" : { get_param: credential_password }
