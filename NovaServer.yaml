@@ -26,21 +26,13 @@ parameters:
     type: string
     
   image:
-    label: Server Image
-    description: Operating system to use for your server.
     type: string
-    default: Ubuntu 14.04 LTS (Trusty Tahr) (PVHVM)
     
   flavor:
-    description: Flavor for Cloud Servers
     type: string
-    default: 2 GB General Purpose v1
-    
+
   network_id:
-    description: cloud network id for intra-cluster communication
     type: string
-    constraints:
-      - custom_constraint: rackconnect.network
       
   domain:
     type: string
@@ -72,6 +64,9 @@ resources:
       user_data:
         str_replace:
           template: |
+            # Output to event log
+            EVENTCREATE /T INFORMATION /L Application /ID 100 /D "User Script Executing"
+
             # Set DNS Servers
             Set-DnsClientServerAddress -InterfaceAlias "RC-FW-*" -ServerAddresses ("172.30.1.7","172.30.1.8")
             
