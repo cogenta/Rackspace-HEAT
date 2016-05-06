@@ -82,7 +82,7 @@ resources:
                 get_param: domain
               $cOUPath:
                 get_param: oupath
-                    $cCredentialUser:
+              $cCredentialUser:
                 get_param: credential_username
-                    $cCredentialPassword:
+              $cCredentialPassword:
                 get_param: credential_password
