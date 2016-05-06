@@ -1,18 +1,18 @@
 heat_template_version: 2016-04-08
 
-#	GfK Online Pricing Intelligence
-#	Production Platform Orchestration Template (HEAT)
-#	http://docs.openstack.org/developer/heat/template_guide/hot_spec.html
-#	http://docs.openstack.org/developer/heat/template_guide/openstack.html
+#  GfK Online Pricing Intelligence
+#  Production Platform Orchestration Template (HEAT)
+#  http://docs.openstack.org/developer/heat/template_guide/hot_spec.html
+#  http://docs.openstack.org/developer/heat/template_guide/openstack.html
 
 description: |
   This is a template to deploy a windows server
 
-#	VERSION HISTORY
+#  VERSION HISTORY
 #
-#	Version	Date		Author			Comments
-#	-------	----------	------------	-----------------------------
-#	1.0		2016-04-26	Tommy Monk  	Initial Version
+#  Version  Date    Author      Comments
+#  -------  ----------  ------------  -----------------------------
+#  1.0    2016-04-26  Tommy Monk    Initial Version
 
 parameters:
 
@@ -49,26 +49,6 @@ parameters:
   join_domain_script:
     type: string
     default: 
-    
-  personality_map:
-    type: json
-    default:
-      'join_doamin.ps1': str_replace:
-                           template: |                         
-                             # Set DNS Servers
-                             Set-DnsClientServerAddress -InterfaceAlias "RC-FW-*" -ServerAddresses ("172.30.1.7","172.30.1.8")
-                             
-                             # Create credentials
-                             $secpasswd = ConvertTo-SecureString "%%cCredentialPassword" -AsPlainText -Force
-                             $credential = New-Object System.Management.Automation.PSCredential("%%cCredentialUser", $secpasswd)
-                             
-                             # Add to domain
-                             Add-Computer -DomainName %%cDomain -OUPath "%%cOUPath" -Credential $credential -Restart
-                           params:
-                             "%%cDomain" : { get_param:  domain }
-                             "%%cOUPath" : { get_param: oupath }
-                             "%%cCredentialUser" : { get_param: credential_username }
-                             "%%cCredentialPassword" : { get_param: credential_password }
 
 resources:
  server:
@@ -84,4 +64,25 @@ resources:
       metadata:
         rax-heat: { get_param: "OS::stack_id" }
         stack-name: { get_param: "OS::stack_name" }
-      personality: { get_param: personality_map }
+      personality:
+        c:\\cloud-automation\\join_doamin.ps1:
+          str_replace:
+            template: |                         
+              # Set DNS Servers
+              Set-DnsClientServerAddress -InterfaceAlias "RC-FW-*" -ServerAddresses ("172.30.1.7","172.30.1.8")
+              
+              # Create credentials
+              $secpasswd = ConvertTo-SecureString "$cCredentialPassword" -AsPlainText -Force
+              $credential = New-Object System.Management.Automation.PSCredential("$cCredentialUser", $secpasswd)
+              
+              # Add to domain
+              Add-Computer -DomainName $cDomain -OUPath "$cOUPath" -Credential $credential -Restart
+            params:
+              $cDomain:
+                get_param: domain
+              $cOUPath:
+                get_param: oupath
+                    $cCredentialUser:
+                get_param: credential_username
+                    $cCredentialPassword:
+                get_param: credential_password
