@@ -61,7 +61,7 @@ resources:
         rax-heat: { get_param: "OS::stack_id" }
         stack-name: { get_param: "OS::stack_name" }
       personality:
-        c:\\cloud-automation\\bootstrap.ps1:
+        'c:\cloud-automation\bootstrap.ps1':
           str_replace:
             template: |                         
               # Set DNS Servers
