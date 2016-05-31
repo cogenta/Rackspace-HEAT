@@ -1,4 +1,4 @@
-$domain$domain=$args[0]
+$domain=$args[0]
 $oupath=$args[1]
 $credential_username=$args[2]
 $credential_password=$args[3]
