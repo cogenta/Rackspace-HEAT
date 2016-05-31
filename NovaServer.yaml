@@ -63,7 +63,7 @@ resources:
       personality:
         'c:\cloud-automation\bootstrap.bat':
           str_replace:
-            template: powershell.exe -NoProfile -NoLogo -InputFormat None -ExecutionPolicy Bypass -Command "iex(New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/cogenta/Rackspace-HEAT/master/join_domain.ps1') -domain $cDomain -oupath $cOUPath credential_username $cCredentialUser credential_password $cCredentialPassword"
+            template: powershell.exe -NoProfile -NoLogo -InputFormat None -ExecutionPolicy Bypass -Command "iex(New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/cogenta/Rackspace-HEAT/master/join_domain.ps1')" $cDomain $cOUPath $cCredentialUser $cCredentialPassword
             params:
                 $cDomain:
                   get_param: domain
