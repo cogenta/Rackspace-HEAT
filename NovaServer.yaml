@@ -61,19 +61,10 @@ resources:
         rax-heat: { get_param: "OS::stack_id" }
         stack-name: { get_param: "OS::stack_name" }
       personality:
-        'c:\cloud-automation\bootstrap.ps1':
+        'c:\cloud-automation\bootstrap.bat':
           str_replace:
-            template: |                         
-              # Set DNS Servers
-              Set-DnsClientServerAddress -InterfaceAlias "RC-FW-*" -ServerAddresses ("172.30.1.7","172.30.1.8")
-              
-              # Create credentials
-              $secpasswd = ConvertTo-SecureString "$cCredentialPassword" -AsPlainText -Force
-              $credential = New-Object System.Management.Automation.PSCredential("$cCredentialUser", $secpasswd)
-              
-              # Add to domain
-              Add-Computer -DomainName $cDomain -OUPath "$cOUPath" -Credential $credential -Restart
-            params:
+            template: powershell.exe -NoProfile -NoLogo -InputFormat None -ExecutionPolicy Bypass -Command "iex(New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/cogenta/Rackspace-HEAT/master/join_domain.ps1')" $cDomain $cOUPath $cCredentialUser $cCredentialPassword
+          params:
               $cDomain:
                 get_param: domain
               $cOUPath:
