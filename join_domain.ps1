@@ -1,7 +1,9 @@
-$domain=$args[0]
-$oupath=$args[1]
-$credential_username=$args[2]
-$credential_password=$args[3]
+ param (
+    [Parameter(Mandatory=$true)][string]$domain,
+    [Parameter(Mandatory=$true)][string]$oupath,
+    [Parameter(Mandatory=$true)][string]$credential_username,
+    [Parameter(Mandatory=$true)][string]$credential_password
+ )
 
 # Set DNS Servers
 Set-DnsClientServerAddress -InterfaceAlias "RC-FW-*" -ServerAddresses ("172.30.1.7","172.30.1.8")
