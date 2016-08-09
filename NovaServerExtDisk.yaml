@@ -55,9 +55,9 @@ resources:
      
  server:
     type: OS::Nova::Server
+    depends_on: block_store_volume
     properties:
       flavor: { get_param: flavor }
-      depends_on: block_store_volume
       name: { get_param: [name_map, { get_param: index}] }
       admin_pass: { get_param: admin_pass }
       networks:
