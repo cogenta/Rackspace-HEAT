@@ -6,7 +6,7 @@ heat_template_version: 2016-04-08
 #  http://docs.openstack.org/developer/heat/template_guide/openstack.html
 
 description: |
-  This is a template to deploy a windows server
+  This is a template to deploy a windows server with external disk
 
 #  VERSION HISTORY
 #
@@ -47,11 +47,20 @@ parameters:
     type: string
 
 resources:
+ block_store_volume:
+   type: OS::Cinder::Volume
+   properties:
+     size: 40
+     image: { get_param: image }
+     
  server:
     type: OS::Nova::Server
     properties:
-      image: { get_param: image }
       flavor: { get_param: flavor }
+      block_device_mapping:
+        - device_name: c
+          volume_id: { get_resource: block_store_volume }
+          delete_on_termination: true
       name: { get_param: [name_map, { get_param: index}] }
       admin_pass: { get_param: admin_pass }
       networks:
