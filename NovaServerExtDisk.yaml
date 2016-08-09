@@ -63,7 +63,7 @@ resources:
       networks:
       - network: 11111111-1111-1111-1111-111111111111
       - network: { get_param: network_id }
-      block_device_mapping:
+      block_device_mapping_v2:
         - device_name: "c"
           volume_id: { get_resource: block_store_volume }
           delete_on_termination: true
