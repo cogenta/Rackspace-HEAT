@@ -6,7 +6,7 @@ heat_template_version: 2016-04-08
 #  http://docs.openstack.org/developer/heat/template_guide/openstack.html
 
 description: |
-  This is a template to deploy a windows server with external disk
+  This is a template to deploy a windows server
 
 #  VERSION HISTORY
 #
@@ -57,15 +57,15 @@ resources:
     type: OS::Nova::Server
     properties:
       flavor: { get_param: flavor }
-      block_device_mapping:
-        - device_name: c
-          volume_id: { get_resource: block_store_volume }
-          delete_on_termination: true
       name: { get_param: [name_map, { get_param: index}] }
       admin_pass: { get_param: admin_pass }
       networks:
       - network: 11111111-1111-1111-1111-111111111111
       - network: { get_param: network_id }
+      block_device_mapping:
+        - device_name: c
+          volume_id: { get_resource: block_store_volume }
+          delete_on_termination: true
       metadata:
         rax-heat: { get_param: "OS::stack_id" }
         stack-name: { get_param: "OS::stack_name" }
