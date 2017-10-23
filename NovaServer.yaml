@@ -5,7 +5,6 @@ heat_template_version: 2016-04-08
 #  http://docs.openstack.org/developer/heat/template_guide/hot_spec.html
 #  http://docs.openstack.org/developer/heat/template_guide/openstack.html
 
-
 description: |
   This is a template to deploy a windows server
 
